@@ -23,31 +23,31 @@ StopWDT     mov.w   #WDTPW|WDTHOLD,&WDTCTL  ; Stop watchdog timer
 ;-------------------------------------------------------------------------------
 ; Main loop here
 ;-------------------------------------------------------------------------------
-main:       mov 	#vetor, R5			          ; Putting vector pointer in R5
-            mov		@R5+, R8				          ; Putting vector size in R8
-            mov		@R5+, R6				          ; Initializing smaller as the first
-            mov		@R5+, R7				          ; Initializing bigger as the second
-            sub		#2, R8 					          ; Correcting counter
+main:		mov 	#vetor, R5				; Putting vector pointer in R5
+			mov		@R5+, R8				; Putting vector size in R8
+			mov		@R5+, R6				; Initializing smaller as the first
+			mov		@R5+, R7				; Initializing bigger as the second
+			sub		#2, R8 					; Correcting counter
             call	#EXTREMOS
             jmp		$
             nop
 
-EXTREMOS:	  cmp		R7, 0(R5)				          ; 0(R5) - R7
-			      jge		swapHigh				          ; Swap if 0(R5) > R7
-retHigh:	  cmp 	R6, 0(R5)				          ; 0(R5) - R6
-			      jl		swapLow					          ; Swap if 0(R5) < R6
-retLow:		  add		#2, R5
-			      dec		R8
-			      jnz		EXTREMOS
-			      ret
+EXTREMOS:	cmp		R7, 0(R5)				; 0(R5) - R7
+			jge		swapHigh				; Swap if 0(R5) > R7
+retHigh:	cmp 	R6, 0(R5)				; 0(R5) - R6
+			jl		swapLow					; Swap if 0(R5) < R6
+retLow:		add		#2, R5
+			dec		R8
+			jnz		EXTREMOS
+			ret
 
-swapHigh:	  mov		@R5, R7
-			      jmp		retHigh
-			      nop
+swapHigh:	mov		@R5, R7
+			jmp		retHigh
+			nop
 
-swapLow:	  mov 	@R5, R6
-			      jmp		retLow
-			      nop
+swapLow:	mov 	@R5, R6
+			jmp		retLow
+			nop
 ;-------------------------------------------------------------------------------
 ; Stack Pointer definition
 ;-------------------------------------------------------------------------------
