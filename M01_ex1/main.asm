@@ -24,31 +24,31 @@ StopWDT     mov.w   #WDTPW|WDTHOLD,&WDTCTL  ; Stop watchdog timer
 ; Main loop here
 ;-------------------------------------------------------------------------------
 main:		mov.w	#vetor, R5				; Coloca em R5 o vetor
-			call	#subrot
-			jmp		$
-			nop
+		call	#subrot
+		jmp		$
+		nop
 
 subrot:		mov.b	@R5, R8					; Coloca o tam em R8
-			clr		R7
-			mov.b	#0xFF, R6
+		clr	R7
+		mov.b	#0xFF, R6
 
 loop:		inc.w	R5
-			cmp.b	R6, 0(R5)
-			jlo		menor
-			jeq		igual
+		cmp.b	R6, 0(R5)
+		jlo	menor
+		jeq	igual
 
-maior:		jmp		continue
+maior:		jmp	continue
 
 menor:		mov.b	@R5, R6
-			mov.b	#1, R7
-			jmp		continue
+		mov.b	#1, R7
+		jmp	continue
 
 igual:		inc.b	R7
-			jmp		continue
+		jmp	continue
 
 continue:	dec.b	R8
-			jnz		loop
-			ret
+		jnz	loop
+		ret
                                             
 
 ;-------------------------------------------------------------------------------
