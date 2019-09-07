@@ -23,48 +23,48 @@ StopWDT     mov.w   #WDTPW|WDTHOLD,&WDTCTL  ; Stop watchdog timer
 ;-------------------------------------------------------------------------------
 ; Main loop here
 ;-------------------------------------------------------------------------------
-MAIN:		  mov		#vetor, R5
-          clr		R6
-          clr		R7
-          clr		R10
-          mov.b	@R5, R10
-          call	#M2M4
-          jmp		$
-          nop
+MAIN:		mov		#vetor, R5
+            clr		R6
+            clr		R7
+            clr		R10
+            mov.b	@R5, R10
+            call	#M2M4
+            jmp		$
+            nop
 
-M2M4:		  dec		R10
-          inc		R5
-          mov.b	@R5, R9
-          mov.b	#2, R8
-          call	#ISMULT
-          add		R9, R6
+M2M4:		dec		R10
+            inc		R5
+            mov.b	@R5, R9
+            mov.b	#2, R8
+            call	#ISMULT
+            add		R9, R6
 
-          mov.b	@R5, R9
-          mov.b	#4, R8
-          call	#ISMULT
-          add		R9, R7
+            mov.b	@R5, R9
+            mov.b	#4, R8
+            call	#ISMULT
+            add		R9, R7
 
-          cmp		#0, R10
-          jge		M2M4
-          ret
+            cmp		#0, R10
+            jge		M2M4
+            ret
 
                                             
-ISMULT:		  sub		R8, R9
+ISMULT:		sub		R8, R9
             jlo		OUTROROT
             jmp		ISMULT
             nop
-SAIDA:		  ret
+SAIDA:		ret
 
-OUTROROT:	  clr		R11
+OUTROROT:	clr		R11
             cmp		R9, R11
             jlo		SUM
             clr		R9
             jmp 	SAIDA
             nop
 
-SUM:		    mov		#1, R9
-			      jmp		SAIDA
-			      nop
+SUM:		mov		#1, R9
+			jmp		SAIDA
+			nop
 
 
 
