@@ -25,7 +25,7 @@ StopWDT     mov.w   #WDTPW|WDTHOLD,&WDTCTL  ; Stop watchdog timer
 ;-------------------------------------------------------------------------------
 main:		mov		#vetor1, R5
             mov		#vetor2, R6
-            mov		#vetor3, R7
+            mov		#0x2020, R7
             mov		@R5+, R8				; Contador
             add		#2, R6					; Incrementando o ponteiro de R6
             add     #2, R7
@@ -63,4 +63,3 @@ SUM16:		clr     0(R7)
 			.data
 vetor1:		.word   7, 1, 1, 1, 1, 1, 1, 1
 vetor2:		.word	7, 1, 1, 1, 1, 1, 1, 1
-vetor3:		.word	7
