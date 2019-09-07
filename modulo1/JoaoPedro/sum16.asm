@@ -25,18 +25,22 @@ StopWDT     mov.w   #WDTPW|WDTHOLD,&WDTCTL  ; Stop watchdog timer
 ;-------------------------------------------------------------------------------
 main:		mov		#vetor1, R5
             mov		#vetor2, R6
+            mov		#vetor3, R7
             mov		@R5+, R8				; Contador
             add		#2, R6					; Incrementando o ponteiro de R6
-            clr		R7
+            add     #2, R7
+
             call	#SUM16
             jmp		$
             nop
 
-SUM16:		add		@R5, R7
-		    add		@R6, R7
+SUM16:		clr     0(R7)
+            add		@R5, 0(R7)
+		    add		@R6, 0(R7)
 
 		    add		#2, R6
 			add		#2,	R5
+            add     #2, R7
 
             dec		R8
             jnz		SUM16
@@ -59,3 +63,4 @@ SUM16:		add		@R5, R7
 			.data
 vetor1:		.word   7, 1, 1, 1, 1, 1, 1, 1
 vetor2:		.word	7, 1, 1, 1, 1, 1, 1, 1
+vetor3:		.word	7
