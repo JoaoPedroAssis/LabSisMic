@@ -24,20 +24,20 @@ StopWDT     mov.w   #WDTPW|WDTHOLD,&WDTCTL  ; Stop watchdog timer
 ; Main loop here
 ;-------------------------------------------------------------------------------
 main:		clr		R10
-			call	#FIB16
-			jmp		$
-			nop
+		    call		#FIB16
+		    jmp		$
+		    nop
 
 FIB16:		mov		#1, R6					; Numero atual fib
-			mov		#1, R5					; Numero anterior fib
+		    mov		#1, R5					; Numero anterior fib
 
 loop:		mov		R6, R7					; Guarda numero antigo
-			add		R5, R6					; Calcula novo numero fib
-			mov		R7, R5					; Guarda numero antigo
+		    add		R5, R6					; Calcula novo numero fib
+		    mov		R7, R5					; Guarda numero antigo
 
-			jnc		loop
-			mov		R5, R10
-			ret
+		    jnc		loop
+		    mov		R5, R10
+		    ret
 ;-------------------------------------------------------------------------------
 ; Stack Pointer definition
 ;-------------------------------------------------------------------------------
