@@ -1,25 +1,9 @@
 #include <msp430.h>
-#define isPressed(P,B) (P & B)
+#include <stdint.h>
+#include "msp430gpio.h"
 
 void rebote(volatile int count) {
     while(count--);
-}
-
-void initLED(volatile unsigned char* dir, volatile unsigned char* out,
-             unsigned int bit, unsigned int on) {
-    *dir |= bit;
-    if (on) {
-        *out|= bit;
-    } else {
-        *out &= ~(bit);
-    }
-}
-
-void initButton(volatile unsigned char* dir, volatile unsigned char* ren,
-                volatile unsigned char* out, unsigned int bit) {
-    *dir &= ~(bit);
-    *ren |= bit;
-    *out |= bit;
 }
 /**
  * main.c
@@ -27,11 +11,11 @@ void initButton(volatile unsigned char* dir, volatile unsigned char* ren,
 int main(void)
 {
     WDTCTL = WDTPW | WDTHOLD;   // stop watchdog timer
-    PM5CTL0 &= ~LOCKLPM5;
+    disableHighZ;
 
-    initLED(&P1DIR, &P1OUT, BIT0, 1);
-    initButton(&P4DIR, &P4REN, &P4OUT, BIT1);
-    initButton(&P2DIR, &P2REN, &P2OUT, BIT3);
+    setPin(P1_0, OUTPUT);
+    setPin(P4_1, INPUT_PULL_UP);
+    setPin(P2_3, INPUT_PULL_UP);
 
     while(1) {
         while(isPressed(P4IN, BIT1) && isPressed(P2IN, BIT3));
