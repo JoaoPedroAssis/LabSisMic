@@ -38,6 +38,13 @@
 #define LOW  0
 
 /**
+ * Macro to help with button manipulation
+ */
+#define PRESSED 0
+#define UNPRESSED 1
+
+
+/**
  * Definitions of the GPIO modes, to improve code understanding and reduce function parameters
  * */
 #define OUTPUT          0

@@ -1,4 +1,4 @@
-#include "../include/msp430gpio.h"
+#include "msp430gpio.h"
 
 
 #ifndef GPIO_PORT_MAPS
