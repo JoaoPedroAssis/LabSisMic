@@ -21,7 +21,6 @@ int main(void)
     setPin(P6_6, OUTPUT);            // Led verde
 
     writePin(P6_6, LOW);
-    writePin(P1_0, HIGH);
 
 	while(1) {
 	    while(!(TB0CCTL0 & CCIFG)); // Aguarda o final da contagem
