@@ -25,7 +25,8 @@ int main(void)
     setPin(P6_6, OUTPUT);            // Led vermelho
     writePin(P6_6, LOW);             // Desliga o verde
 
-    while(readPin(P2_3) == UNPRESSED || readPin(P4_1) == UNPRESSED);
+    while(P2IN&BIT3 || P4IN&BIT1);
+    //while(readPin(P2_3) == UNPRESSED || readPin(P4_1) == UNPRESSED);
 
     while(1){
         debounce(10000);
