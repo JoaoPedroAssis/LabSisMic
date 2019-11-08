@@ -17,20 +17,14 @@ void wait(uint16_t time_ms)
 
 void i2cInit(uint8_t isMaster, uint8_t myAddr)
 {
-    // Testes
-    // -------------------------
-    P6DIR |= BIT6;
-    P6OUT &= ~(BIT6);
-    P1DIR |= BIT0;
-    P1OUT &= ~(BIT0);
-    // -----------------------
     UCB0CTLW0 = UCMODE_3 | UCSWRST;         // Modo: I2C
     UCB0CTLW1 = UCASTP_2;                   // com stop automático
-                                            // _________________________________
+
+    //UCB0TBCNT = 1;                          // _________________________________
     if(isMaster)                            // Se for mestre:
     {                                       //
         UCB0CTLW0 |= UCSSEL__SMCLK | UCMST; // Configura como mestre e usa SMCLK
-        UCB0BRW = 10;                       // SCL @ 100kHz
+        UCB0BRW = 100;                       // SCL @ 100kHz
     }                                       // _________________________________
     else                                    // Se for escravo:
     {                                       //
@@ -60,12 +54,15 @@ uint8_t i2c(cmd_t cmd, uint8_t addr, uint8_t *data, uint8_t count)
     UCB0TBCNT = count;                      // o número de bytes
     UCB0.data = data;                       // e configura o ponteiro de dados
 
-    UCB0CTLW0 &= ~UCTR;
+
 
     switch (cmd) {
         case send:     UCB0CTLW0 |= UCTR + UCTXSTT;            break;
         case testAddr: UCB0CTLW0 |= UCTR + UCTXSTT + UCTXSTP;  break;
-        case receive:  UCB0CTLW0 |=        UCTXSTT;            break;
+        case receive:
+            UCB0CTLW0 &= ~UCTR;
+            UCB0CTLW0 |=        UCTXSTT;
+            break;
     }
 
     __low_power_mode_0();                   // Aguarda o final da comunicação
@@ -85,7 +82,6 @@ __interrupt void I2C_ISR()
             break;
 
         case UCIV__UCBCNTIFG:
-            P6OUT |= BIT6;   // APAGAR
             UCB0.status = 0; // Success
             break;
 
@@ -98,7 +94,7 @@ __interrupt void I2C_ISR()
             break;
 
         case UCIV__UCTXIFG0:
-            P1OUT |= BIT0; // APAGAR
+
             UCB0TXBUF = *(UCB0.data)++;
             break;
 

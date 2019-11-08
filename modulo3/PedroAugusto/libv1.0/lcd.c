@@ -19,34 +19,30 @@ void lcdInit() {
         lcdAddr = 0x3F;
 
     lcdWriteNibble(0x3, 0);
-    wait(45);
     lcdWriteNibble(0x3, 0);
-    wait(45);
     lcdWriteNibble(0x3, 0);
-    wait(45);
+
     lcdWriteNibble(0x2, 0);
-    wait(45);
     lcdWriteByte(0x28, 0); // 4 bits e 2 linhas
-    wait(45);
     lcdWriteByte(0x0C, 0);
-    wait(45);
     lcdWriteByte(0x06, 0);
-    wait(45);
+
     lcdWriteByte(0x01, 0);
 }
 
 void lcdWriteNibble(uint8_t nibble, uint8_t isChar){
+    uint8_t aux;
     nibble <<= 4;
     nibble |= lcdBL | isChar ;
-
+    aux = nibble | 0;
     //nibble |= 0;
-    nibble &= ~(lcdEN);
-    i2c(send, lcdAddr, &nibble, 1);
+    //nibble &= ~(lcdEN);
+    i2c(send, lcdAddr, &aux, 1);
     nibble |= lcdEN;
     i2c(send, lcdAddr, &nibble, 1);
-    //nibble |= 0;
-    nibble &= ~(lcdEN);
-    i2c(send, lcdAddr, &nibble, 1);
+    nibble |= 0;
+    //nibble &= ~(lcdEN);
+    i2c(send, lcdAddr, &aux, 1);
 }
 
 void lcdWriteByte(uint8_t byte, uint8_t isChar){
