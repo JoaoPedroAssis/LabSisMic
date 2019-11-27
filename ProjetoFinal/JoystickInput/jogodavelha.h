@@ -28,7 +28,9 @@ int minimax(Arv* a,int jogador);
 int ganhou(Arv* a);
 
 //Funcoes para adiministrar o andamento do jogo
+int switch_setinha();
 Arv* vezDoPc(Arv* a,char simb);
+Arv* vezDoPcAleatoria(Arv* a,char simb);
 int jogoacabou(Arv* a);
 
 //Funcao para interface com usuario

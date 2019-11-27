@@ -23,6 +23,62 @@ Arv* cria_vazia() {
     return a;
 }
 
+
+Arv* vezDoPcAleatoria(Arv* a,char simb){
+    int cont = 0;
+    int i, j;
+    // Calucla a quantidade de espaços vazios
+    for(i=0;i<3;i++){
+        for(j=0;j<3;j++){
+            if(a->info[i][j] == 32)
+                cont++;
+        }
+    }
+    // Gera um número aleatório
+    int aleatorio = rand() % cont;
+    cont = 1;
+    // Conta até a posição vazia aleatória
+    for(i=0;i<3;i++){
+        for(j=0;j<3;j++){
+            if(a->info[i][j] == 32) {
+                if(cont == aleatorio)
+                    a->info[i][j] = simb;
+                cont++;
+            }
+        }
+    }
+}
+
+int switch_setinha() {
+        int i = 0;
+        uint16_t x = 0;
+        uint16_t y = 0;
+        // Trocar estado do led Vermelho (Bit Toogle)
+        P1OUT ^= BIT0;
+
+        // Analisa jogada
+        for (i = 0; i < 8; i++) {
+            // Ler 8 vezes de cada canal
+            x += adcRead(4);
+            y += adcRead(5);
+        }
+
+        switch(joystick_jogada(x, y)) {
+            case 0:
+            case 1:
+            case 2:
+                return 1;
+            case 3:
+            case 4:
+            case 5:
+               return 2;
+            case 6:
+            case 7:
+            case 8:
+            default:
+                return 0;
+        }
+}
 Arv* insere_simb(Arv* a,char simb) {
     int i = 0;
     uint16_t x = 0;
@@ -144,7 +200,7 @@ int ganhou(Arv* a){
             }
     }
     if (velha==9){
-        return 0;
+        return 2;
     }
     //Diagonal Principal
     for(l=0;l<3;l++){
@@ -325,6 +381,11 @@ void print_jogo(Arv* a){
     // Pula linha
     lcdWriteByte(0xC0, 0);
 
+    // Ultimo termo da segunda linha
+    lcdPrint("5:");
+    string[0] = a->info[1][2];
+    lcdPrint(string);
+
     // 3 linha
     lcdPrint("6:");
     string[0] = a->info[2][0];
@@ -334,11 +395,6 @@ void print_jogo(Arv* a){
     lcdPrint(string);
     lcdPrint("8:");
     string[0] = a->info[2][2];
-    lcdPrint(string);
-
-    // Ultimo termo da segunda linha
-    lcdPrint("5:");
-    string[0] = a->info[1][2];
     lcdPrint(string);
 }
 
@@ -361,7 +417,6 @@ int joystick_jogada(int somax, int somay){
     } else {
         if (somax < 300) { // Quadrante da esquerda
             if (somay < 300) { // Esquerda em cima
-            lcdPrint("0");
             } else {
                 if (somay > 3000) { // Esquerda baixo
                     return 6;

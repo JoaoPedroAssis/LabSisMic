@@ -33,15 +33,65 @@ void main(void)
     i2cInit(1, 0);
     lcdInit();
 
+    lcdPrint("Jogador");
+    lcdWriteByte(0xC0, 0);
+    lcdPrint("Maquina");
+
+    int var;
+    int flag = 2;
+    while(1) {
+        wait(200);
+        var = switch_setinha();
+
+        if(var == 1 && flag != 1){
+            flag = 1;
+            lcdClear();
+            lcdPrint("Jogador  <-");
+            lcdWriteByte(0xC0, 0);
+            lcdPrint("Maquina");
+        }
+        else if(var == 0 && flag != 0){
+            flag = 0;
+            lcdClear();
+            lcdPrint("Jogador");
+            lcdWriteByte(0xC0, 0);
+            lcdPrint("Maquina  <-");
+        }
+    }
+
     // Habilita as interrupções
     // __enable_interrupt();
     print_jogo(a);
-    while(1)
+    int cont = 0;
+
+    while(!jogoacabou(a))
     {
-      // Espera as interrupções
-        insere_simb(a, 'X');
+        // Espera as interrupções
+        if(cont % 2 == 0)
+            insere_simb(a, 'X');
+        else
+            //insere_simb(a, 'O');
+            vezDoPcAleatoria(a, 'O');
         print_jogo(a);
+        cont++;
     }
+    // Print Vitória
+    lcdClear();
+    switch (ganhou(a)){
+    case -1:
+        lcdPrint("X Ganhou");
+        break;
+    case 1:
+        lcdPrint("O Ganhou");
+        break;
+    case 2:
+        lcdPrint("Empate");
+        break;
+    default:
+        lcdPrint("Default");
+    }
+
+
 }
 
 /*
