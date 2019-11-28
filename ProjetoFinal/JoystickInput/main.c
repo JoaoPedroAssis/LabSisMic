@@ -39,8 +39,13 @@ void main(void)
 
     int var;
     int flag = 2;
+    int isMultiplayer = 0;
     while(1) {
         wait(200);
+        // Botão pressionado
+        if (!(P1IN & BIT6))
+            break;
+
         var = switch_setinha();
 
         if(var == 1 && flag != 1){
@@ -49,6 +54,7 @@ void main(void)
             lcdPrint("Jogador  <-");
             lcdWriteByte(0xC0, 0);
             lcdPrint("Maquina");
+            isMultiplayer = 1;
         }
         else if(var == 0 && flag != 0){
             flag = 0;
@@ -56,6 +62,7 @@ void main(void)
             lcdPrint("Jogador");
             lcdWriteByte(0xC0, 0);
             lcdPrint("Maquina  <-");
+            isMultiplayer = 0;
         }
     }
 
@@ -70,8 +77,10 @@ void main(void)
         if(cont % 2 == 0)
             insere_simb(a, 'X');
         else
-            //insere_simb(a, 'O');
-            vezDoPcAleatoria(a, 'O');
+            if (isMultiplayer)
+                insere_simb(a, 'O');
+            else
+                vezDoPcAleatoria(a, 'O');
         print_jogo(a);
         cont++;
     }
